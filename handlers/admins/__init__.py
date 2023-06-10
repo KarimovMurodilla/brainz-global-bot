@@ -1,2 +1,2 @@
 from . import bot_manage
-from . import callbacks
+# from . import callbacks

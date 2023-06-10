@@ -7,9 +7,7 @@ class Gsheets:
         self.sheet_name = sheet_name
         self.gs = gspread.service_account("utils/misc/google_sheets/config/service_account.json")
         self.wks = None
-
         
-
     
     def create_new_sheet(self):
         """Creating table templates"""
