@@ -3,6 +3,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 from data import config
 from utils.db_api.connection import Database
+from utils.misc.google_sheets.gsheets import Gsheets
 
 
 # AIOgram
@@ -13,3 +14,7 @@ dp = Dispatcher(bot, storage=storage)
 
 # DB
 db = Database()
+
+
+# Gsheets
+gs = Gsheets("BrainzGlobal")

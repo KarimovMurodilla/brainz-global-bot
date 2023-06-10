@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from utils.db_api.base import Base
-from utils.db_api.models import User, Channel, Audio, Admin
+from utils.db_api.models import User, Talent, Recruiter
 
 from data.config import DATABASE_URL
 
@@ -41,8 +41,7 @@ class Database:
             await session.merge(
                 User(
                     user_id=user_id,
-                    username=username,
-                    first_name=first_name
+                    username=username
                 )
             )
             await session.commit()
@@ -63,55 +62,29 @@ class Database:
             response = await session.execute(select(User))
             return response.scalars().all()
 
-    # ---Channel model---
+    # ---Talent model---
 
-    async def reg_channel(self, chat_id, title):
+    async def reg_talent(self, user_id, fullname):
         """Регистрация channel"""
         async with self.async_session() as session:
             session: AsyncSession
-            await session.merge(
-                Channel(
-                    chat_id=chat_id,
-                    title=title
-                )
-            )
+
+            talent = Talent(fullname=fullname)
+            user = await session.execute(select(User).where(User.user_id == user_id))
+            talent.user = user.scalar_one()
+            await session.merge(talent)
+
             await session.commit()
-
-
-    async def get_channel(self, chat_id) -> Channel:
-        """Получения пользователя"""
-        async with self.async_session() as session:
-            session: AsyncSession
-
-            response = await session.get(Channel, chat_id)
-            return response
 
     # ---Audio model---
 
-    async def reg_audio(self, chat_id, text, dist):
+    async def reg_recruiter(self, user_id, fullname, company):
         """Регистрация audio"""
         async with self.async_session() as session:
             session: AsyncSession
-            await session.merge(
-                Audio(
-                    chat_id=chat_id,
-                    text=text,
-                    distination=dist
-                )
-            )
+            recruiter = Recruiter(fullname=fullname, company=company)
+            user = await session.execute(select(User).where(User.user_id == user_id))
+            recruiter.user = user.scalar_one()
+            await session.merge(recruiter)
+
             await session.commit()
-
-
-    async def get_audio(self, chat_id) -> Audio:
-        async with self.async_session() as session:
-            session: AsyncSession
-            response = await session.execute(select(Audio).where(Audio.chat_id==chat_id))
-            return response.scalars().all()
-
-    # ADMINS
-
-    async def get_admin(self, username, password):
-        async with self.async_session() as session:
-            session: AsyncSession
-            response = await session.execute(select(Admin).where(Admin.username==username, Admin.password==password))
-            return response.scalar()

@@ -12,8 +12,8 @@ class User(Base):
 
     user_id = Column(BigInteger, primary_key=True, unique=True, autoincrement=False)
     username = Column(String(50))
-    talent = relationship("Talent", back_populates="User")
-    recruiter = relationship("Recruiter", back_populates="User")
+    talent = relationship("Talent", back_populates="user")
+    recruiter = relationship("Recruiter", back_populates="user")
 
 
 
@@ -21,7 +21,6 @@ class Talent(Base):
     __tablename__ = "talent"
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(50))
     fullname = Column(String(50))
     role = Column(String(10), default="Талант")
     user_id = Column(Integer, ForeignKey("user.user_id"))
@@ -32,9 +31,8 @@ class Recruiter(Base):
     __tablename__ = "recruiter"
 
     id = Column(Integer, primary_key=True)
-    username = Column(String(50))
     fullname = Column(String(50))
     role = Column(String(10), default="Рекрутер")
     company = Column(String(150))
     user_id = Column(Integer, ForeignKey("user.user_id"))
-    user = relationship("User", back_populates="talent")
+    user = relationship("User", back_populates="recruiter")
