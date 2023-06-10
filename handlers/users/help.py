@@ -11,4 +11,5 @@ async def bot_help(message: types.Message):
         "Commands:\n"
         "/start - Start bot\n"
         "/help - Help\n"
+        "/payments - Платежи"
     )
